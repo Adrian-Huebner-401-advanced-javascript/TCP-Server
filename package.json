@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Adrian-Huebner-401-advanced-javascript/TCP-Server#readme",
   "dependencies": {
+    "jest": "^24.9.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
