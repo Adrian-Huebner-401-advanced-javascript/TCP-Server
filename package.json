@@ -1,0 +1,28 @@
+{
+  "name": "TCP-Server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adrian-Huebner-401-advanced-javascript/TCP-Server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Adrian-Huebner-401-advanced-javascript/TCP-Server/issues"
+  },
+  "homepage": "https://github.com/Adrian-Huebner-401-advanced-javascript/TCP-Server#readme",
+  "dependencies": {
+    "jest": "^24.9.0",
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "jsdoc": "^3.6.3"
+  }
+}
