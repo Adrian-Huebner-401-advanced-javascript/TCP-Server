@@ -2,58 +2,41 @@
 
 const net = require('net');
 const client = new net.Socket();
-const fs = require('fs');
-const util = require('util');
+const fs = require('fs').promises;
 
 client.connect(4000, 'localhost', () => {
   console.log('App connected to host');
 });
 
-client.write('Hello');
+const readFile = (filePath) => fs.readFile(filePath);
+const writeFile = (filePath, buffer) => fs.writeFile(filePath, buffer);
+const upperCase = (buffer) => {
+  const convertedBuffer = buffer.toString().trim().toUpperCase();
+  return Buffer.from(convertedBuffer);
+}
 
-// const readFile = async file => {
-//   const fsRead = util.promisify(fs.readFile);
-//   try{
-//     const data = await fsRead(file);
-//     return data;
-//   } catch(error){
-//   }
-// };
+const events = {
+  'READ_ERROR' : 'read-error',
+  'WRITE_ERROR' : 'write-error',
+  'WRITE_SUCCESS' : 'write-success'
+};
 
-// const upperCase = async data => {
-//   try{
-//     let text = await data.toString().toUpperCase();
-//     client.write()
-//     return text;
-//   } catch (error){
-//   }
-// };
+module.exports ={
+  readFile,
+  writeFile,
+  upperCase
+}
 
-// const saveFile = async (file, text) => {
-//   try {
-//     const fsWrite = util.promisify(fs.writeFile);
-//     await fsWrite(file, Buffer.from(text));
-//     client.write('save')
-//   } catch (error){
-//   }
-// };
+const alterFile = (file) => {
+  return readFile(file)
+    .then(contents => upperCase(contents))
+    .then(buffer => {
+      return writeFile(file, buffer)
+        .catch(error => client.write(`${events.WRITE_ERROR} ${error.text}`))
+    })
+    .then(() => client.write(`${events.WRITE_SUCCESS} ${file}`))
+    .catch(error => client.write(`${events.READ_ERROR} ${error.text}`))
+}
 
-// const alterFile = async file => {
-//   try {
-//     const data = await readFile(file);
-//     const text = upperCase(data);
-//     saveFile(file, text);
-//   } catch (error){
-//   }
-// };
-
-// let file = process.argv.slice(2).shift();
-// alterFile(file);
-
-// const events = ['write', 'read', 'update']
-
-
-// setInterval(() => {
-//   let event = events[Math.floor(Math.random() * events.length)];
-//   client.write(`${event} has occured`)
-// }, 500);
+let file = process.argv.slice(2).shift();
+alterFile(file);

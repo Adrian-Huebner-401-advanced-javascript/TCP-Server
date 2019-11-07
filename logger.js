@@ -7,12 +7,15 @@ client.connect(4000, 'localhost', () => {
   console.log('logger has connected');
 });
 
-client.on('data', (buffer) => {
-  // if (buffer.toString() === 'save'){
-  //  console.log('You have saved information')
-  //}
-  // if (buffer.toString() === 'error){
-  //  console.log('You have an error')
-  //}
-  console.log(buffer.toString());
-});
+const handleData = (buffer) => {
+  const data = JSON.parse(buffer);
+  if(data.event === 'write-error' || data.event === 'read-error'){
+    console.error(data);
+  } else if(data.event === 'write-success'){
+    console.log(data);
+  } else{
+    console.log('Ignored');
+  }
+}
+
+client.on('data', handleData)
